@@ -5,34 +5,35 @@
     tools:context="com.example.aiman.familycontacts.ContactAddActivity">
 
 
-    <ImageView
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageViewContactImage"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/abc_btn_check_material"/>
+        android:src="@drawable/abc_btn_check_material"
+        android:onClick="onClickImageButtonContactImage"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:id="@+id/editTextContactFirstName"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageViewContactImage" />
+        android:layout_below="@+id/imageViewContactImage"
+        android:hint="First Name"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
         android:id="@+id/editTextContactLastName"
         android:layout_below="@+id/editTextContactFirstName"
         android:layout_alignRight="@+id/editTextContactFirstName"
-        android:layout_alignEnd="@+id/editTextContactFirstName" />
+        android:layout_alignEnd="@+id/editTextContactFirstName"
+        android:hint="Last Name"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +43,8 @@
         android:id="@+id/editTextContactPhoneNumber"
         android:layout_below="@+id/editTextContactLastName"
         android:layout_alignRight="@+id/editTextContactLastName"
-        android:layout_alignEnd="@+id/editTextContactLastName" />
+        android:layout_alignEnd="@+id/editTextContactLastName"
+        android:hint="Phone Number"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -52,7 +54,8 @@
         android:id="@+id/editTextContactEmail"
         android:layout_below="@+id/editTextContactPhoneNumber"
         android:layout_alignRight="@+id/editTextContactPhoneNumber"
-        android:layout_alignEnd="@+id/editTextContactPhoneNumber" />
+        android:layout_alignEnd="@+id/editTextContactPhoneNumber"
+        android:hint="Email Address"/>
 
     <Button
         android:layout_width="wrap_content"

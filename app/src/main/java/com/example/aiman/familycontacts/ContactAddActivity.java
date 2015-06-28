@@ -27,7 +27,9 @@ public class ContactAddActivity extends Activity {
     }
 
 
-
+    public void onClickImageButtonContactImage (View view) {
+        Log.d(TAG, "onClickImageButtonContactImage");
+    }
 
 
 

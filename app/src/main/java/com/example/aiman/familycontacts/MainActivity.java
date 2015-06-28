@@ -19,10 +19,13 @@ public class MainActivity extends Activity {
 
     private final String TAG = "MainActivity";
     private String verificationKey;
+    private AsyncTask myVerificationTask;
 
     public void onClickButtonPhoneVerify (View view) {
         Log.d(TAG, "onClickButtonPhoneVerify");
-        new MyVerificationTask().execute();
+        if (validPhoneNumber()) {
+            myVerificationTask.execute();
+        }
     }
 
     public void onClickButtonPhoneConfirm (View view) {
@@ -40,6 +43,25 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void onClickImageButtonContactImage() {
+        Log.d(TAG, "onClickImageButtonContactImage");
+    }
+
+    /**
+     * Validate the user input phone number
+     * Validation criteria: //TODO: fill phone validation criteria
+     * @return true: if phone number is valid, false: otherwise
+     */
+    private boolean validPhoneNumber() {
+        Log.d(TAG, "validPhoneNumber");
+        //FIXME: what are validation criteria?
+        EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
+        if (editTextPhoneNumber.getText() != null && editTextPhoneNumber.getText().toString().length() == 10) {
+            return true;
+        }
+        editTextPhoneNumber.setError("Invalid Phone Number");
+        return false;
+    }
 
 
 
@@ -51,8 +73,7 @@ public class MainActivity extends Activity {
 
 
 
-
-   // ---------------------- Activity Life Cycle -------------------------- //
+    // ---------------------- Activity Life Cycle -------------------------- //
 
 
 
@@ -84,6 +105,15 @@ public class MainActivity extends Activity {
     protected void onStop() {
         Log.d(TAG, "onStop");
         super.onStop();
+
+        myVerificationTask.cancel(true);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
     }
 
     @Override
@@ -92,7 +122,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialisation
         verificationKey = null;
+        myVerificationTask = new MyVerificationTask();
     }
 
     @Override
@@ -129,6 +161,9 @@ public class MainActivity extends Activity {
             while(count > 0) {
                 try {
                     Thread.sleep(1000);
+                    if (isCancelled()) {
+                        return false;
+                    }
                     publishProgress();
                     count--;
                 } catch (InterruptedException exception) {
@@ -158,16 +193,12 @@ public class MainActivity extends Activity {
             EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
             String phoneNumber = editTextPhoneNumber.getText().toString();
 
-            if (editTextPhoneNumber.length() == 10) {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phoneNumber, null, verificationKey, null, null);
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, verificationKey, null, null);
 
+            Button buttonVerify = (Button) findViewById(R.id.buttonPhoneVerify);
+            buttonVerify.setEnabled(false);
 
-                Button buttonVerify = (Button) findViewById(R.id.buttonPhoneVerify);
-                buttonVerify.setEnabled(false);
-            } else {
-                Toast.makeText(MainActivity.this, "Invalid Phone Number",Toast.LENGTH_SHORT).show();
-            }
         }
 
         @Override
