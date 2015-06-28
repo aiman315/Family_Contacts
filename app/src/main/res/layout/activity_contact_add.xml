@@ -1,0 +1,86 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.aiman.familycontacts.ContactAddActivity">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewContactImage"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/abc_btn_check_material"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editTextContactFirstName"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/imageViewContactImage" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/editTextContactLastName"
+        android:layout_below="@+id/editTextContactFirstName"
+        android:layout_alignRight="@+id/editTextContactFirstName"
+        android:layout_alignEnd="@+id/editTextContactFirstName" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/editTextContactPhoneNumber"
+        android:layout_below="@+id/editTextContactLastName"
+        android:layout_alignRight="@+id/editTextContactLastName"
+        android:layout_alignEnd="@+id/editTextContactLastName" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/editTextContactEmail"
+        android:layout_below="@+id/editTextContactPhoneNumber"
+        android:layout_alignRight="@+id/editTextContactPhoneNumber"
+        android:layout_alignEnd="@+id/editTextContactPhoneNumber" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_contact_cancel"
+        android:id="@+id/buttonContactCancel"
+        android:layout_below="@+id/editTextContactEmail"
+        android:layout_alignRight="@+id/editTextContactEmail"
+        android:layout_alignEnd="@+id/editTextContactEmail"
+        android:onClick="onClickButtonContactCancel"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_contact_confirm"
+        android:id="@+id/buttonContactConfirm"
+        android:layout_below="@+id/buttonContactCancel"
+        android:layout_alignRight="@+id/buttonContactCancel"
+        android:layout_alignEnd="@+id/buttonContactCancel"
+        android:onClick="onClickButtonContactConfirm"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_contact_add_image"
+        android:id="@+id/buttonContactAddImage"
+        android:layout_below="@+id/buttonContactConfirm"
+        android:layout_alignRight="@+id/buttonContactConfirm"
+        android:layout_alignEnd="@+id/buttonContactConfirm"
+        android:onClick="onClickButtonContactAddImage"/>
+</RelativeLayout>

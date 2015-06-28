@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.aiman.familycontacts.MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/text_view_phone_number"
+        android:id="@+id/textViewPhoneNumber"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:ems="10"
+        android:id="@+id/editTextPhoneNumber"
+        android:layout_below="@+id/textViewPhoneNumber"
+        android:layout_centerHorizontal="true"
+        android:hint="10-digits phone number"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_phone_verify"
+        android:id="@+id/buttonPhoneVerify"
+        android:layout_below="@+id/editTextPhoneNumber"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickButtonPhoneVerify"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/empty"
+        android:id="@+id/textViewPhoneCount"
+        android:layout_below="@+id/buttonPhoneVerify"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/holo_red_dark"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/text_view_verification_code"
+        android:id="@+id/textViewVerificationCode"
+        android:layout_below="@+id/textViewPhoneCount"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editTextVerificationCode"
+        android:layout_below="@+id/textViewVerificationCode"
+        android:layout_centerHorizontal="true"
+        android:hint="4-digits code received"/>
+
+    <Button
+        android:id="@+id/buttonPhoneConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_phone_confirm"
+        android:layout_below="@+id/editTextVerificationCode"
+        android:layout_centerHorizontal="true"
+        android:onClick="onClickButtonPhoneConfirm"/>
+
+</RelativeLayout>

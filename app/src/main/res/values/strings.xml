@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Family Contacts</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="text_view_phone_number">My Phone Number</string>
+    <string name="text_view_verification_code">Verification Code</string>
+    <string name="button_phone_verify">Verify</string>
+    <string name="button_phone_confirm">Confirm</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="empty"></string>
+    <string name="title_activity_contact_add">ContactAddActivity</string>
+
+    <string name="button_contact_cancel">Cancel</string>
+    <string name="button_contact_confirm">Confirm</string>
+    <string name="button_contact_add_image">Add Photo</string>
+</resources>
