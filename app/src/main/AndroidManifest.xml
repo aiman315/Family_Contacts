@@ -28,10 +28,10 @@
         </activity>
 
         <provider
-            android:name=".ContactsContentProvider"
-            android:authorities="com.example.aiman.familycontacts"
+            android:name="com.example.aiman.familycontacts.ContactsContentProvider"
+            android:authorities="com.example.aiman.familycontacts.ContactsContentProvider"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="false" >
         </provider>
     </application>
 

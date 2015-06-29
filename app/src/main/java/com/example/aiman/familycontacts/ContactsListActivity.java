@@ -2,6 +2,8 @@ package com.example.aiman.familycontacts;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -31,11 +33,11 @@ public class ContactsListActivity extends AppCompatActivity {
 
         if (userType == USER_ADMIN) {
             //TODO: SQL query to create in Contacts table
-            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.NOT_VERIFIED);
+            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.VERIFIED);
             Toast.makeText(getApplicationContext(), "Contact Add Confirmed", Toast.LENGTH_SHORT).show();
         } else {
             //TODO: SQL query to create in Requests table
-            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.VERIFIED);
+            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.NOT_VERIFIED);
             Toast.makeText(getApplicationContext(), "Contact Add Requested", Toast.LENGTH_SHORT).show();
         }
         getContentResolver().insert(MyContactsConnector.CONTENT_URI, contact);
@@ -66,6 +68,30 @@ public class ContactsListActivity extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Internal class to load contacts from database into the contacts list
+     * @author Aiman
+     *
+     */
+    private class LoadContactsTask extends AsyncTask<Object, Object, Cursor> {
+
+        @Override
+        protected Cursor doInBackground(Object... arg0) {
+            Log.d(TAG, "doInBackground");
+            return getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+        }
+
+        protected void onPostExecute(Cursor result) {
+            Log.d(TAG, "onPostExecute");
+            if (result != null) {
+                Log.d(TAG, result.getColumnName(0));
+            } else {
+                Log.d(TAG, "NULL");
+            }
+        }
+    }
+
+
     // -------------------- Activity Life Cycle ------------------------
 
     @Override
@@ -92,6 +118,8 @@ public class ContactsListActivity extends AppCompatActivity {
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+
+        new LoadContactsTask().execute();
     }
 
     @Override
@@ -160,7 +188,6 @@ public class ContactsListActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE_ADD_CONTACT && resultCode == RESULT_OK) {
-            //TODO:
             addContact(data);
         } else if (requestCode == REQUEST_CODE_EDIT_CONTACT && resultCode == RESULT_OK) {
             //TODO:

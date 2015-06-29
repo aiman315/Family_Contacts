@@ -1,10 +1,12 @@
 package com.example.aiman.familycontacts;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -29,6 +31,8 @@ public class ContactsContentProvider extends ContentProvider {
         uriMatcher.addURI(MyContactsConnector.AUTHORITY, "contacts/#", SINGLE_CONTACT);
     }
 
+    private SQLiteDatabase contactsDB;
+
     public ContactsContentProvider() {
     }
 
@@ -52,7 +56,8 @@ public class ContactsContentProvider extends ContentProvider {
     public boolean onCreate() {
         Log.d(TAG, "onCreate");
         DatabaseOpenHelper dbHelper = new DatabaseOpenHelper(getContext(), MyContactsConnector.DATABASE_NAME, null, MyContactsConnector.DATABASE_VERSION);
-        return dbHelper.getWritableDatabase() != null;
+        contactsDB = dbHelper.getWritableDatabase();
+        return contactsDB != null;
     }
 
     @Override
@@ -60,14 +65,20 @@ public class ContactsContentProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Log.d(TAG, "query");
         // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         Log.d(TAG, "insert");
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        long rowID = contactsDB.insert(MyContactsConnector.TABLE_NAME, null, values);
+        if (rowID > 0) {
+            Uri newUri = ContentUris.withAppendedId(MyContactsConnector.CONTENT_URI, rowID);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return newUri;
+        }
+        throw new SQLException("Failed to insert row into " + uri);
     }
 
     @Override
@@ -86,10 +97,6 @@ public class ContactsContentProvider extends ContentProvider {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-
-
-
-
     private class DatabaseOpenHelper extends SQLiteOpenHelper {
         private final String TAG = "DatabaseOpenHelper";
         public DatabaseOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -105,8 +112,7 @@ public class ContactsContentProvider extends ContentProvider {
                             MyContactsConnector.CONTACT_NAME + " text, " +
                             MyContactsConnector.CONTACT_PHONE + " text, " +
                             MyContactsConnector.CONTACT_EMAIL + " text, " +
-                            MyContactsConnector.CONTACT_IMAGE + " text); " +
-                            MyContactsConnector.CONTACT_VERIFIED + "integer";
+                            MyContactsConnector.CONTACT_VERIFIED + " integer );";
             db.execSQL(createTable);
         }
 

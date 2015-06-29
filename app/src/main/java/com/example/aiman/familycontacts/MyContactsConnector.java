@@ -8,7 +8,7 @@ import android.net.Uri;
  */
 public class MyContactsConnector {
 
-    public static final String AUTHORITY = "com.exmaple.aiman.familycontacts";
+    public static final String AUTHORITY = "com.example.aiman.familycontacts.ContactsContentProvider";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/contacts");
 
     //Database attributes
