@@ -9,7 +9,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class ContactsContentProvider extends ContentProvider {
@@ -64,9 +66,29 @@ public class ContactsContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         Log.d(TAG, "query");
-        // TODO: Implement this to handle query requests from clients.
-        //throw new UnsupportedOperationException("Not yet implemented");
-        return null;
+        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
+        queryBuilder.setTables(MyContactsConnector.TABLE_NAME);
+
+        //check query type: Multiple Contacts OR Single Contact
+        switch (uriMatcher.match(uri)) {
+            case MULTIPLE_CONTACTS: //TODO
+                break;
+            case SINGLE_CONTACT:
+                queryBuilder.appendWhere(MyContactsConnector.CONTACT_ID + "=" + uri.getPathSegments().get(ID_PATH_SEGMENT));
+                break;
+            default: throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }
+
+        //set up for order of output rows
+        //if no specific column is provided, sort in ascending order of Contact IDs
+        //otherwise, sort in ascending order of provided column
+        String orderBy = (TextUtils.isEmpty(sortOrder))? MyContactsConnector.CONTACT_ID : sortOrder;
+
+        //get the results with the new query settings
+        Cursor cursor = queryBuilder.query(contactsDB, projection, selection, selectionArgs, null, null, orderBy);
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Override

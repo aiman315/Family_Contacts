@@ -1,5 +1,6 @@
 package com.example.aiman.familycontacts;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,6 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
@@ -78,16 +83,52 @@ public class ContactsListActivity extends AppCompatActivity {
         @Override
         protected Cursor doInBackground(Object... arg0) {
             Log.d(TAG, "doInBackground");
-            return getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+
+            //get contacts
+            Cursor results = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+
+            //add contacts
+            int size = results.getCount();
+            for (int i = 0 ; i < size ; i++) {
+                if (isCancelled()) {
+                    return null;
+                }
+                Button button = new Button(getApplicationContext());
+                button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setId(i);
+                button.setText("id is : " + button.getId());
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "onClick");
+                        //Intent intentViewContactActivity = new Intent(this, ContactViewActivity.class);
+                        //startActivity(intentViewContactActivity);
+                    }
+                });
+                publishProgress(button);
+            }
+            return null;
+
         }
 
         protected void onPostExecute(Cursor result) {
             Log.d(TAG, "onPostExecute");
-            if (result != null) {
-                Log.d(TAG, result.getColumnName(0));
-            } else {
-                Log.d(TAG, "NULL");
-            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //clear previous contacts from layout
+            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
+            linearLayoutContactsList.removeAllViews();
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+            super.onProgressUpdate(values);
+            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
+            linearLayoutContactsList.addView((View)values[0]);
         }
     }
 
@@ -161,13 +202,13 @@ public class ContactsListActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_add_contact: {
-                Intent intentAddActivity = new Intent(getApplicationContext(), ContactAddActivity.class);
-                startActivityForResult(intentAddActivity, REQUEST_CODE_ADD_CONTACT);
+                Intent intentAddContactActivity = new Intent(getApplicationContext(), ContactAddActivity.class);
+                startActivityForResult(intentAddContactActivity, REQUEST_CODE_ADD_CONTACT);
                 return true;
             }
             case R.id.action_edit_contact: {
-                Intent intentAddActivity = new Intent(getApplicationContext(), ContactAddActivity.class);
-                startActivityForResult(intentAddActivity, REQUEST_CODE_EDIT_CONTACT);
+                Intent intentAddContactActivity = new Intent(getApplicationContext(), ContactAddActivity.class);
+                startActivityForResult(intentAddContactActivity, REQUEST_CODE_EDIT_CONTACT);
                 return true;
             }
             case R.id.action_delete_contact: {
