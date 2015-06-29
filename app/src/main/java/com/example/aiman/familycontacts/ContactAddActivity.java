@@ -15,20 +15,21 @@ public class ContactAddActivity extends Activity {
 
     public void onClickButtonContactCancel (View view) {
         Log.d(TAG, "onClickButtonContactCancel");
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
 
     public void onClickButtonContactConfirm (View view) {
         Log.d(TAG, "onClickButtonContactConfirm");
-    }
-
-    public void onClickButtonContactAddImage (View view) {
-        Log.d(TAG, "onClickButtonContactAddImage");
+        setResult(RESULT_OK);
+        finish();
     }
 
 
     public void onClickImageButtonContactImage (View view) {
         Log.d(TAG, "onClickImageButtonContactImage");
+        //TODO:
     }
 
 
@@ -63,6 +64,12 @@ public class ContactAddActivity extends Activity {
     protected void onStop() {
         Log.d(TAG, "onStop");
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy");
+        super.onDestroy();
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.example.aiman.familycontacts;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.Menu;
@@ -12,12 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-public class MainActivity extends Activity {
+public class VerificationActivity extends AppCompatActivity {
 
-    private final String TAG = "MainActivity";
+    private final String TAG = "VerificationActivity";
     private String verificationKey;
     private AsyncTask myVerificationTask;
 
@@ -120,7 +119,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_verification);
 
         // Initialisation
         verificationKey = null;
@@ -131,7 +130,7 @@ public class MainActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_verification, menu);
         return true;
     }
 
