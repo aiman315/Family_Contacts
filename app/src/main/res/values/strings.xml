@@ -14,5 +14,8 @@
     <string name="button_contact_confirm">Confirm</string>
     <string name="button_contact_add_image">Add Photo</string>
     <string name="title_activity_contacts_list">ContactsListActivity</string>
+    <string name="title_activity_contact_view">ContactViewActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

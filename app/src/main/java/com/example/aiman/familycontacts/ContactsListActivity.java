@@ -85,24 +85,30 @@ public class ContactsListActivity extends AppCompatActivity {
             Log.d(TAG, "doInBackground");
 
             //get contacts
-            Cursor results = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+            final Cursor cursorResults = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
 
             //add contacts
-            int size = results.getCount();
-            for (int i = 0 ; i < size ; i++) {
+            final int indexContactId = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_ID);
+            int indexContactName = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_NAME);
+            int indexContactPhone = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_PHONE);
+            int indexContactEmail = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_EMAIL);
+
+            for (cursorResults.moveToFirst(); !cursorResults.isAfterLast(); cursorResults.moveToNext()) {
                 if (isCancelled()) {
                     return null;
                 }
                 Button button = new Button(getApplicationContext());
                 button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                button.setId(i);
-                button.setText("id is : " + button.getId());
+                button.setId(Integer.parseInt(cursorResults.getString(indexContactId)));
+                button.setText(cursorResults.getString(indexContactName));
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d(TAG, "onClick");
-                        //Intent intentViewContactActivity = new Intent(this, ContactViewActivity.class);
-                        //startActivity(intentViewContactActivity);
+
+                        Intent intentViewContactActivity = new Intent(getApplicationContext(), ContactViewActivity.class);
+                        intentViewContactActivity.putExtra(MyContactsConnector.CONTACT_ID, v.getId());
+                        startActivity(intentViewContactActivity);
                     }
                 });
                 publishProgress(button);

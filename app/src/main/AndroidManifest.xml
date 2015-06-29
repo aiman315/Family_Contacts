@@ -28,11 +28,16 @@
         </activity>
 
         <provider
-            android:name="com.example.aiman.familycontacts.ContactsContentProvider"
+            android:name=".ContactsContentProvider"
             android:authorities="com.example.aiman.familycontacts.ContactsContentProvider"
             android:enabled="true"
             android:exported="false" >
         </provider>
+
+        <activity
+            android:name=".ContactViewActivity"
+            android:label="@string/title_activity_contact_view" >
+        </activity>
     </application>
 
 </manifest>
