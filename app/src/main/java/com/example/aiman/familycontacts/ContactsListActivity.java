@@ -1,5 +1,6 @@
 package com.example.aiman.familycontacts;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,29 +15,34 @@ public class ContactsListActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_ADD_CONTACT = 900;
     private static final int REQUEST_CODE_EDIT_CONTACT = 901;
 
-    private static final int RESULT_CODE_CANCEL = 800;
-    private static final int RESULT_CODE_ADD_SUCCESS = 801;
-    private static final int RESULT_CODE_ADD_FAIL = 802;
-
     private static final String TAG = "ContactsListActivity";
     private static final int USER_ADMIN = 0;
     private static final int USER_REGULAR = 1;
 
     private int userType;
 
-    private boolean addContact() {
+    private boolean addContact(Intent data) {
         Log.d(TAG, "addContact");
+
+        ContentValues contact = new ContentValues();
+        contact.put(MyContactsConnector.CONTACT_NAME, data.getStringExtra(MyContactsConnector.CONTACT_NAME));
+        contact.put(MyContactsConnector.CONTACT_PHONE, data.getStringExtra(MyContactsConnector.CONTACT_EMAIL));
+        contact.put(MyContactsConnector.CONTACT_EMAIL, data.getStringExtra(MyContactsConnector.CONTACT_NAME));
+
         if (userType == USER_ADMIN) {
             //TODO: SQL query to create in Contacts table
+            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.NOT_VERIFIED);
             Toast.makeText(getApplicationContext(), "Contact Add Confirmed", Toast.LENGTH_SHORT).show();
         } else {
             //TODO: SQL query to create in Requests table
+            contact.put(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.VERIFIED);
             Toast.makeText(getApplicationContext(), "Contact Add Requested", Toast.LENGTH_SHORT).show();
         }
+        getContentResolver().insert(MyContactsConnector.CONTENT_URI, contact);
         return false;
     }
 
-    private boolean editContact() {
+    private boolean editContact(Intent data) {
         Log.d(TAG, "editContact");
         if (userType == USER_ADMIN) {
             //TODO: SQL query to modify in Contacts table
@@ -155,10 +161,10 @@ public class ContactsListActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_ADD_CONTACT && resultCode == RESULT_OK) {
             //TODO:
-            addContact();
+            addContact(data);
         } else if (requestCode == REQUEST_CODE_EDIT_CONTACT && resultCode == RESULT_OK) {
             //TODO:
-            editContact();
+            editContact(data);
         } else if ((requestCode == REQUEST_CODE_ADD_CONTACT || requestCode == REQUEST_CODE_EDIT_CONTACT) && resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
         }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +23,11 @@ public class ContactAddActivity extends Activity {
     private static final String TAG = "ContactAddActivity";
     private static final int REQUEST_CODE_CONTACT_IMAGE_GALLERY = 100;
 
+    public EditText editTextContactFullName, editTextContactPhoneNumber, editTextContactEmail;
+    public ImageButton ImageButton;
+
+
+
 
     public void onClickButtonContactCancel (View view) {
         Log.d(TAG, "onClickButtonContactCancel");
@@ -32,14 +38,18 @@ public class ContactAddActivity extends Activity {
 
     public void onClickButtonContactConfirm (View view) {
         Log.d(TAG, "onClickButtonContactConfirm");
-        setResult(RESULT_OK);
+        Intent intentContactData = new Intent();
+        intentContactData.putExtra(MyContactsConnector.CONTACT_NAME, editTextContactFullName.getText().toString());
+        intentContactData.putExtra(MyContactsConnector.CONTACT_PHONE, editTextContactPhoneNumber.getText().toString());
+        intentContactData.putExtra(MyContactsConnector.CONTACT_EMAIL, editTextContactEmail.getText().toString());
+
+        setResult(RESULT_OK, intentContactData);
         finish();
     }
 
 
     public void onClickImageButtonContactImage (View view) {
         Log.d(TAG, "onClickImageButtonContactImage");
-        //TODO:
         Intent intentContactImgae = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intentContactImgae, REQUEST_CODE_CONTACT_IMAGE_GALLERY);
     }
@@ -56,7 +66,7 @@ public class ContactAddActivity extends Activity {
                 ImageButton contactImage = (ImageButton) findViewById(R.id.imageButtonContactImage);
                 contactImage.setImageBitmap(bitmap);
                 contactImage.setTag(imageUri.toString());
-                Log.d(TAG, imageUri.toString());
+
             } catch (FileNotFoundException e) {
                 Toast.makeText(getApplicationContext(),"Error!", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "FileNotFoundException");
@@ -110,6 +120,12 @@ public class ContactAddActivity extends Activity {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_add);
+
+        editTextContactFullName = (EditText) findViewById(R.id.editTextContactFullName);
+        editTextContactPhoneNumber  = (EditText) findViewById(R.id.editTextContactPhoneNumber);
+        editTextContactEmail = (EditText) findViewById(R.id.editTextContactEmail);
+
+        ImageButton = (ImageButton) findViewById(R.id.imageButtonContactImage);
 
     }
 
