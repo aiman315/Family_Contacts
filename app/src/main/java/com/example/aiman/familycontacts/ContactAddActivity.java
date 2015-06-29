@@ -1,16 +1,26 @@
 package com.example.aiman.familycontacts;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
 
 
 public class ContactAddActivity extends Activity {
 
-    private final String TAG = "ContactAddActivity";
+    private static final String TAG = "ContactAddActivity";
+    private static final int REQUEST_CODE_CONTACT_IMAGE_GALLERY = 100;
 
 
     public void onClickButtonContactCancel (View view) {
@@ -30,9 +40,32 @@ public class ContactAddActivity extends Activity {
     public void onClickImageButtonContactImage (View view) {
         Log.d(TAG, "onClickImageButtonContactImage");
         //TODO:
+        Intent intentContactImgae = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intentContactImgae, REQUEST_CODE_CONTACT_IMAGE_GALLERY);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK){
+            Uri imageUri = data.getData();
+            Bitmap bitmap;
+            try {
+                bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                ImageButton contactImage = (ImageButton) findViewById(R.id.imageButtonContactImage);
+                contactImage.setImageBitmap(bitmap);
+                contactImage.setTag(imageUri.toString());
+                Log.d(TAG, imageUri.toString());
+            } catch (FileNotFoundException e) {
+                Toast.makeText(getApplicationContext(),"Error!", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "FileNotFoundException");
+            } catch (NullPointerException e) {
+                Toast.makeText(getApplicationContext(),"Error!", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "NullPointerException");
+            }
+        }
+    }
 
     // ---------------------- Activity Life Cycle -------------------------- //
 

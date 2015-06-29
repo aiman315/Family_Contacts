@@ -1,89 +1,74 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/scrollView"
     tools:context="com.example.aiman.familycontacts.ContactAddActivity">
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageViewContactImage"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/abc_btn_check_material"
-        android:onClick="onClickImageButtonContactImage"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editTextContactFirstName"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/imageViewContactImage"
-        android:hint="First Name"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButtonContactImage"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/abc_btn_check_material"
+            android:onClick="onClickImageButtonContactImage"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editTextContactLastName"
-        android:layout_below="@+id/editTextContactFirstName"
-        android:layout_alignRight="@+id/editTextContactFirstName"
-        android:layout_alignEnd="@+id/editTextContactFirstName"
-        android:hint="Last Name"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/editTextContactFullName"
+            android:layout_below="@+id/imageButtonContactImage"
+            android:layout_centerHorizontal="true"
+            android:hint="Full Name"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        android:ems="10"
-        android:id="@+id/editTextContactPhoneNumber"
-        android:layout_below="@+id/editTextContactLastName"
-        android:layout_alignRight="@+id/editTextContactLastName"
-        android:layout_alignEnd="@+id/editTextContactLastName"
-        android:hint="Phone Number"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            android:ems="10"
+            android:id="@+id/editTextContactPhoneNumber"
+            android:layout_below="@+id/editTextContactFullName"
+            android:layout_centerHorizontal="true"
+            android:hint="Phone Number"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/editTextContactEmail"
-        android:layout_below="@+id/editTextContactPhoneNumber"
-        android:layout_alignRight="@+id/editTextContactPhoneNumber"
-        android:layout_alignEnd="@+id/editTextContactPhoneNumber"
-        android:hint="Email Address"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/editTextContactEmail"
+            android:layout_below="@+id/editTextContactPhoneNumber"
+            android:layout_centerHorizontal="true"
+            android:hint="Email Address"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_contact_cancel"
-        android:id="@+id/buttonContactCancel"
-        android:layout_below="@+id/editTextContactEmail"
-        android:layout_alignRight="@+id/editTextContactEmail"
-        android:layout_alignEnd="@+id/editTextContactEmail"
-        android:onClick="onClickButtonContactCancel"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_contact_cancel"
+            android:id="@+id/buttonContactCancel"
+            android:layout_below="@+id/editTextContactEmail"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickButtonContactCancel"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_contact_confirm"
-        android:id="@+id/buttonContactConfirm"
-        android:layout_below="@+id/buttonContactCancel"
-        android:layout_alignRight="@+id/buttonContactCancel"
-        android:layout_alignEnd="@+id/buttonContactCancel"
-        android:onClick="onClickButtonContactConfirm"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_contact_confirm"
+            android:id="@+id/buttonContactConfirm"
+            android:layout_below="@+id/buttonContactCancel"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickButtonContactConfirm"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_contact_add_image"
-        android:id="@+id/buttonContactAddImage"
-        android:layout_below="@+id/buttonContactConfirm"
-        android:layout_alignRight="@+id/buttonContactConfirm"
-        android:layout_alignEnd="@+id/buttonContactConfirm"
-        android:onClick="onClickButtonContactAddImage"/>
-</RelativeLayout>
+
+
+    </RelativeLayout>
+</ScrollView>
