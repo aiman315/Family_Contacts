@@ -1,6 +1,7 @@
 package com.example.aiman.familycontacts;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -30,12 +31,19 @@ public class VerificationActivity extends AppCompatActivity {
     public void onClickButtonPhoneConfirm (View view) {
         Log.d(TAG, "onClickButtonPhoneConfirm");
 
+        EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         EditText editTextVerificationCode = (EditText) findViewById(R.id.editTextVerificationCode);
+        Cursor cursorResutls = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+
+        String selection =
+                MyContactsConnector.CONTACT_PHONE+ " = "+editTextPhoneNumber.getText().toString()+
+                        " and "+MyContactsConnector.CONTACT_VERIFIED+" = "+MyContactsConnector.NOT_VERIFIED;
+        
         String code = editTextVerificationCode.getText().toString();
         Log.d(TAG, "Code value = "+code);
-        if (code.equals(verificationKey)) {
+        if (code.equals(verificationKey) && getContentResolver().query(MyContactsConnector.CONTENT_URI, null, selection, null, null).getCount() != 0) {
             Log.d(TAG, "Success");
-            Intent intentContactAdd = new Intent(this, ContactAddActivity.class);
+            Intent intentContactAdd = new Intent(this, ContactsListActivity.class);
             startActivity(intentContactAdd);
         } else {
             Log.d(TAG, "Fail");

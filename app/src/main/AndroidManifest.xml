@@ -12,6 +12,10 @@
         <activity
             android:name=".VerificationActivity"
             android:label="@string/title_activity_verification" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ContactAddActivity"
@@ -22,7 +26,6 @@
             android:label="@string/title_activity_contacts_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,7 +39,8 @@
 
         <activity
             android:name=".ContactViewActivity"
-            android:label="@string/title_activity_contact_view" >
+            android:label="@string/title_activity_contact_view"
+            android:theme="@style/Theme.AppCompat">
         </activity>
     </application>
 

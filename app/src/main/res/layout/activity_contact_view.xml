@@ -1,64 +1,98 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.aiman.familycontacts.ContactViewActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollViewContactViewActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/textViewContactFullName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.example.aiman.familycontacts.ContactViewActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/textViewContactFullNameValue"
-        android:layout_below="@+id/textViewContactFullName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/textViewContactFullName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:singleLine="false"
+            android:text="Name" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Phone"
-        android:id="@+id/textViewContactPhoneNumber"
-        android:layout_below="@+id/textViewContactFullNameValue"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/textViewContactFullNameValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewContactFullName"
+            android:clickable="false"
+            android:text="@string/empty"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/textViewContactPhoneNumberValue"
-        android:layout_below="@+id/textViewContactPhoneNumber"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="275dp"
-        android:layout_marginEnd="275dp" />
+        <TextView
+            android:id="@+id/textViewContactPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/textViewContactFullNameValue"
+            android:layout_centerInParent="true"
+            android:phoneNumber="true"
+            android:clickable="false"
+            android:text="Phone" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Email"
-        android:id="@+id/textViewContactEmail"
-        android:layout_below="@+id/textViewContactPhoneNumberValue"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:id="@+id/textViewContactPhoneNumberValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textViewContactPhoneNumber"
+            android:layout_marginEnd="275dp"
+            android:layout_marginRight="275dp"
+            android:clickable="false"
+            android:text="@string/empty"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:id="@+id/textViewContactEmailValue"
-        android:layout_below="@+id/textViewContactEmail"
-        android:layout_alignRight="@+id/textViewContactPhoneNumberValue"
-        android:layout_alignEnd="@+id/textViewContactPhoneNumberValue" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textViewContactEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentRight="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/textViewContactPhoneNumberValue"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:text="Email" />
+
+        <TextView
+            android:id="@+id/textViewContactEmailValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/textViewContactPhoneNumberValue"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/textViewContactPhoneNumberValue"
+            android:layout_below="@+id/textViewContactEmail"
+            android:clickable="false"
+            android:text="@string/empty"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+
+</ScrollView>

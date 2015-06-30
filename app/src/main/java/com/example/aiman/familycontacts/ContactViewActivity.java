@@ -7,20 +7,14 @@ import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
 
 public class ContactViewActivity extends Activity {
     private final String TAG = "ContactViewActivity";
@@ -109,6 +103,9 @@ public class ContactViewActivity extends Activity {
         Toast.makeText(getApplicationContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show();
     }
 
+    //------------------------ ViewContactActivity LifeCycle methods -------------------------
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +119,6 @@ public class ContactViewActivity extends Activity {
 
         contactId = getIntent().getIntExtra(MyContactsConnector.CONTACT_ID, -1);
     }
-
-    //------------------------ ViewContactActivity LifeCycle methods -------------------------
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

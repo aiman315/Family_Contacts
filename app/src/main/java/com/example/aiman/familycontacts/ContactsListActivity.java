@@ -1,6 +1,5 @@
 package com.example.aiman.familycontacts;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -33,8 +32,8 @@ public class ContactsListActivity extends AppCompatActivity {
 
         ContentValues contact = new ContentValues();
         contact.put(MyContactsConnector.CONTACT_NAME, data.getStringExtra(MyContactsConnector.CONTACT_NAME));
-        contact.put(MyContactsConnector.CONTACT_PHONE, data.getStringExtra(MyContactsConnector.CONTACT_EMAIL));
-        contact.put(MyContactsConnector.CONTACT_EMAIL, data.getStringExtra(MyContactsConnector.CONTACT_NAME));
+        contact.put(MyContactsConnector.CONTACT_PHONE, data.getStringExtra(MyContactsConnector.CONTACT_PHONE));
+        contact.put(MyContactsConnector.CONTACT_EMAIL, data.getStringExtra(MyContactsConnector.CONTACT_EMAIL));
 
         if (userType == USER_ADMIN) {
             //TODO: SQL query to create in Contacts table
@@ -108,6 +107,7 @@ public class ContactsListActivity extends AppCompatActivity {
 
                         Intent intentViewContactActivity = new Intent(getApplicationContext(), ContactViewActivity.class);
                         intentViewContactActivity.putExtra(MyContactsConnector.CONTACT_ID, v.getId());
+                        //startActivityForResult(intentViewContactActivity, REQUEST_CODE_EDIT_CONTACT);
                         startActivity(intentViewContactActivity);
                     }
                 });
