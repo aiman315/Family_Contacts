@@ -1,7 +1,6 @@
 package com.example.aiman.familycontacts;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,10 @@ import android.widget.TextView;
 public class VerificationActivity extends AppCompatActivity {
 
     private final String TAG = "VerificationActivity";
-    private String verificationKey;
+    private static final int VERIFICATION_CODE_LENGTH = 4;
+    private static final int VERIFICATION_CODE_WAIT = 30;
+
+    private String verificationCode;
     private AsyncTask myVerificationTask;
 
     public void onClickButtonPhoneVerify (View view) {
@@ -33,25 +35,20 @@ public class VerificationActivity extends AppCompatActivity {
 
         EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         EditText editTextVerificationCode = (EditText) findViewById(R.id.editTextVerificationCode);
-        Cursor cursorResutls = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
 
         String selection =
                 MyContactsConnector.CONTACT_PHONE+ " = "+editTextPhoneNumber.getText().toString()+
                         " and "+MyContactsConnector.CONTACT_VERIFIED+" = "+MyContactsConnector.NOT_VERIFIED;
         
-        String code = editTextVerificationCode.getText().toString();
-        Log.d(TAG, "Code value = "+code);
-        if (code.equals(verificationKey) && getContentResolver().query(MyContactsConnector.CONTENT_URI, null, selection, null, null).getCount() != 0) {
+        String verificationCodeInput = editTextVerificationCode.getText().toString();
+        Log.d(TAG, "Code value = "+verificationCodeInput);
+        if (verificationCodeInput.equals(verificationCode) && getContentResolver().query(MyContactsConnector.CONTENT_URI, null, selection, null, null).getCount() != 0) {
             Log.d(TAG, "Success");
             Intent intentContactAdd = new Intent(this, ContactsListActivity.class);
             startActivity(intentContactAdd);
         } else {
             Log.d(TAG, "Fail");
         }
-    }
-
-    public void onClickImageButtonContactImage() {
-        Log.d(TAG, "onClickImageButtonContactImage");
     }
 
     /**
@@ -69,13 +66,6 @@ public class VerificationActivity extends AppCompatActivity {
         editTextPhoneNumber.setError("Invalid Phone Number");
         return false;
     }
-
-
-
-
-
-
-
 
 
 
@@ -130,7 +120,7 @@ public class VerificationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verification);
 
         // Initialisation
-        verificationKey = null;
+        verificationCode = null;
         myVerificationTask = new MyVerificationTask();
     }
 
@@ -145,21 +135,11 @@ public class VerificationActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        return item.getItemId() == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
     private class MyVerificationTask extends AsyncTask {
-        private int count = 30;
+        private int count = VERIFICATION_CODE_WAIT;
 
         @Override
         protected Object doInBackground(Object[] params) {
@@ -181,27 +161,22 @@ public class VerificationActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-        @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            verificationKey = "";
+            verificationCode = "";
 
-            for (int i = 0 ; i < 4 ; i++) {
+            for (int i = 0 ; i < VERIFICATION_CODE_LENGTH ; i++) {
                 int rand = (int)(Math.random()*10);
-                verificationKey += rand;
+                verificationCode += rand;
             }
 
-            Log.d(TAG, "the value is "+verificationKey);
+            Log.d(TAG, "the value is "+ verificationCode);
 
             EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
             String phoneNumber = editTextPhoneNumber.getText().toString();
 
             SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, verificationKey, null, null);
+            smsManager.sendTextMessage(phoneNumber, null, verificationCode, null, null);
 
             Button buttonVerify = (Button) findViewById(R.id.buttonPhoneVerify);
             buttonVerify.setEnabled(false);
