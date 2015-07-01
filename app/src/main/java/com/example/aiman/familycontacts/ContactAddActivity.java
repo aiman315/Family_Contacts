@@ -1,30 +1,35 @@
 package com.example.aiman.familycontacts;
 
-import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 
 
-public class ContactAddActivity extends Activity {
+public class ContactAddActivity extends AppCompatActivity {
 
     private static final String TAG = "ContactAddActivity";
     private static final int REQUEST_CODE_CONTACT_IMAGE_GALLERY = 100;
 
-    public EditText editTextContactFullName, editTextContactPhoneNumber, editTextContactEmail;
-    public ImageButton ImageButton;
+    private EditText editTextContactFullName, editTextContactPhoneNumber, editTextContactEmail;
+    private ImageButton ImageButton;
+    private CheckBox checkBoxContactVerify;
+
+    private int contactId;
+    private boolean isEdit;
 
 
 
@@ -38,12 +43,17 @@ public class ContactAddActivity extends Activity {
 
     public void onClickButtonContactConfirm (View view) {
         Log.d(TAG, "onClickButtonContactConfirm");
-        Intent intentContactData = new Intent();
-        intentContactData.putExtra(MyContactsConnector.CONTACT_NAME, editTextContactFullName.getText().toString());
-        intentContactData.putExtra(MyContactsConnector.CONTACT_PHONE, editTextContactPhoneNumber.getText().toString());
-        intentContactData.putExtra(MyContactsConnector.CONTACT_EMAIL, editTextContactEmail.getText().toString());
+        ContentValues contentValuesContactDetails = new ContentValues();
+        contentValuesContactDetails.put(MyContactsConnector.CONTACT_NAME, editTextContactFullName.getText().toString());
+        contentValuesContactDetails.put(MyContactsConnector.CONTACT_PHONE, editTextContactPhoneNumber.getText().toString());
+        contentValuesContactDetails.put(MyContactsConnector.CONTACT_EMAIL, editTextContactEmail.getText().toString());
+        contentValuesContactDetails.put(MyContactsConnector.CONTACT_VERIFIED, checkBoxContactVerify.isChecked() ? 1 : 0);
 
-        setResult(RESULT_OK, intentContactData);
+        if (isEdit) {
+            getContentResolver().update(MyContactsConnector.CONTENT_URI, contentValuesContactDetails, MyContactsConnector.CONTACT_ID + " = " + contactId, null);
+        } else {
+            getContentResolver().insert(MyContactsConnector.CONTENT_URI, contentValuesContactDetails);
+        }
         finish();
     }
 
@@ -121,11 +131,23 @@ public class ContactAddActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_add);
 
+        isEdit = false;
+
         editTextContactFullName = (EditText) findViewById(R.id.editTextContactFullName);
         editTextContactPhoneNumber  = (EditText) findViewById(R.id.editTextContactPhoneNumber);
         editTextContactEmail = (EditText) findViewById(R.id.editTextContactEmail);
-
         ImageButton = (ImageButton) findViewById(R.id.imageButtonContactImage);
+        checkBoxContactVerify = (CheckBox) findViewById(R.id.checkBoxContactVerify);
+
+        Bundle bundleContactDetails = getIntent().getExtras();
+        if (bundleContactDetails != null) {
+            isEdit = true;
+
+            contactId = bundleContactDetails.getInt(MyContactsConnector.CONTACT_ID);
+            editTextContactFullName.setText(bundleContactDetails.getString(MyContactsConnector.CONTACT_NAME));
+            editTextContactPhoneNumber.setText(bundleContactDetails.getString(MyContactsConnector.CONTACT_PHONE));
+            editTextContactEmail.setText(bundleContactDetails.getString(MyContactsConnector.CONTACT_EMAIL));
+        }
 
     }
 

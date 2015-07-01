@@ -1,56 +1,38 @@
 package com.example.aiman.familycontacts;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class ContactViewActivity extends Activity {
-    private final String TAG = "ContactViewActivity";
+public class ContactViewActivity extends AppCompatActivity {
+    private static final String TAG = "ContactViewActivity";
+    private static final int CONTACT_ID_INVALID = -999;
 
-    private long contactId;
+    private int contactId;
     private TextView textViewContactFullNameValue;
     private TextView textViewContactPhoneNumberValue;
     private TextView textViewContactEmailValue;
-    private int isVerified;
+    private ImageView imageViewContactVerification;
 
-    private View.OnClickListener copyContent = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            onClickCopyViewContent(v);
-        }
-    };
-
-    /**
-     * Starts NewContactActivity with the purpose to edit a contact
-     * passes existing details to fill fields in the started activity, so they are edited
-     * Invoked by clicking on <strong>Edit Contact</strong> in action bar
-     */
     private void editContact() {
-        Intent editContactIntent = new Intent(this, ContactAddActivity.class);
-        editContactIntent.putExtra(MyContactsConnector.CONTACT_ID, contactId);
-        editContactIntent.putExtra(MyContactsConnector.CONTACT_NAME, textViewContactFullNameValue.getText());
-        editContactIntent.putExtra(MyContactsConnector.CONTACT_PHONE, textViewContactPhoneNumberValue.getText());
-        editContactIntent.putExtra(MyContactsConnector.CONTACT_EMAIL, textViewContactEmailValue.getText());
-        editContactIntent.putExtra(MyContactsConnector.CONTACT_VERIFIED, isVerified);
-        startActivity(editContactIntent);
+        Intent intentEditContact = new Intent(this, ContactAddActivity.class);
+        intentEditContact.putExtra(MyContactsConnector.CONTACT_ID, contactId);
+        intentEditContact.putExtra(MyContactsConnector.CONTACT_NAME, textViewContactFullNameValue.getText());
+        intentEditContact.putExtra(MyContactsConnector.CONTACT_PHONE, textViewContactPhoneNumberValue.getText());
+        intentEditContact.putExtra(MyContactsConnector.CONTACT_EMAIL, textViewContactEmailValue.getText());
+        intentEditContact.putExtra(MyContactsConnector.CONTACT_VERIFIED, MyContactsConnector.NOT_VERIFIED);
+        startActivity(intentEditContact);
     }
 
-    /**
-     * Creates a dialog for user to choose to delete contact from database
-     * Invoked by clicking on <strong>Delete Contact</strong> in action bar
-     */
     private void deleteContact() {
         AlertDialog.Builder builder = new AlertDialog.Builder(ContactViewActivity.this);
         builder.setTitle("Delete Dialog");
@@ -61,46 +43,41 @@ public class ContactViewActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
 
                 // a task to delete contact without affecting worker thread
-                AsyncTask<Long, Object, Object> deleteTask = new AsyncTask<Long, Object, Object>(){
+                AsyncTask<Long, Object, Object> deleteTask = new AsyncTask<Long, Object, Object>() {
                     @Override
                     protected Object doInBackground(Long... params) {
                         getContentResolver().delete(MyContactsConnector.CONTENT_URI, MyContactsConnector.CONTACT_ID + "=" + contactId, null);
                         return null;
                     }
+
                     @Override
                     protected void onPostExecute(Object result) {
-                        finish();		// close activity upon delete
+                        finish();        // close activity upon delete
                     }
                 };
-                deleteTask.execute(new Long[]{contactId});
+                deleteTask.execute();
             }
         });
-
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
-    /**
-     * Displays a toast
-     * Invoked by <strong>onActivityResult</strong> to indicate an issue loading image
-     */
-    private void loadingPhotoError() {
-        Log.d(TAG, "loadingPhotoError");
-        Toast.makeText(getApplicationContext(), "Problem loading photo", Toast.LENGTH_SHORT).show();
-    }
 
-    /**
-     * Copies clicked view text to clip board
-     * Displays a toast to indicate the content of clicked view has been copied
-     * @param v clicked view
-     */
-    public void onClickCopyViewContent(View v) {
-        Log.d(TAG, "onClickCopyViewContent");
-        TextView textView = (TextView) v;
-        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(null, textView.getText().toString());
-        clipboard.setPrimaryClip(clip);
-        Toast.makeText(getApplicationContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show();
+    private void fillContactDetails() {
+        String selection = MyContactsConnector.CONTACT_ID + "=" + contactId;
+        Cursor cursorResult = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, selection, null, null);
+
+        cursorResult.moveToFirst();
+
+        textViewContactFullNameValue.setText(cursorResult.getString(MyContactsConnector.NAME_COLUMN));
+        textViewContactPhoneNumberValue.setText(cursorResult.getString(MyContactsConnector.PHONE_COLUMN));
+        textViewContactEmailValue.setText(cursorResult.getString(MyContactsConnector.EMAIL_COLUMN));
+
+
+        imageViewContactVerification.setImageResource(cursorResult.getInt(MyContactsConnector.VERIFICATION_COLUMN) == 1 ? android.R.drawable.checkbox_on_background : android.R.drawable.ic_delete);
+
+        setTitle(cursorResult.getString(MyContactsConnector.NAME_COLUMN)); //set activity title to contact name
+        cursorResult.close();
     }
 
     //------------------------ ViewContactActivity LifeCycle methods -------------------------
@@ -113,11 +90,10 @@ public class ContactViewActivity extends Activity {
 
         textViewContactFullNameValue = (TextView) findViewById(R.id.textViewContactFullNameValue);
         textViewContactPhoneNumberValue = (TextView) findViewById(R.id.textViewContactPhoneNumberValue);
-        textViewContactPhoneNumberValue.setOnClickListener(copyContent);
         textViewContactEmailValue = (TextView) findViewById(R.id.textViewContactEmailValue);
-        textViewContactEmailValue.setOnClickListener(copyContent);
+        imageViewContactVerification = (ImageView) findViewById(R.id.imageViewContactVerification);
 
-        contactId = getIntent().getIntExtra(MyContactsConnector.CONTACT_ID, -1);
+        contactId = getIntent().getIntExtra(MyContactsConnector.CONTACT_ID, CONTACT_ID_INVALID);
     }
 
     @Override
@@ -143,13 +119,13 @@ public class ContactViewActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        new LoadContactTask().execute(contactId);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
+        fillContactDetails();
     }
 
     @Override
@@ -164,35 +140,20 @@ public class ContactViewActivity extends Activity {
             case R.id.action_settings:
                 Log.d(TAG, "action_settings");
                 break;
+            case R.id.action_edit_contact: {
+                Log.d(TAG, "action_edit_contact");
+                editContact();
+                break;
+            }
+            case R.id.action_delete_contact: {
+                Log.d(TAG, "action_delete_contact");
+                deleteContact();
+                break;
+            }
             default:
                 Log.d(TAG, "problem in selection");
                 break;
         }
         return true;
-    }
-
-    //inner class to load the selected contact details without interrupting the worker thread
-    private class LoadContactTask extends AsyncTask<Long, Object, Cursor> {
-
-        //query for data from database
-        @Override
-        protected Cursor doInBackground(Long... params) {
-            String whereClause = MyContactsConnector.CONTACT_ID + "=" + params[0];
-            return getContentResolver().query(MyContactsConnector.CONTENT_URI, null, whereClause, null, null);
-        }
-
-        // fill activity views with data from database
-        @Override
-        protected void onPostExecute(Cursor result) {
-            super.onPostExecute(result);
-            result.moveToFirst();
-
-            textViewContactFullNameValue.setText(result.getString(MyContactsConnector.NAME_COLUMN));
-            textViewContactPhoneNumberValue.setText(result.getString(MyContactsConnector.PHONE_COLUMN));
-            textViewContactEmailValue.setText(result.getString(MyContactsConnector.EMAIL_COLUMN));
-
-            setTitle(result.getString(MyContactsConnector.NAME_COLUMN)); //set activity title to contact name
-            result.close();
-        }
     }
 }

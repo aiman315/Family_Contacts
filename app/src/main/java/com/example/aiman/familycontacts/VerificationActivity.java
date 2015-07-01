@@ -16,32 +16,31 @@ import android.widget.TextView;
 
 public class VerificationActivity extends AppCompatActivity {
 
-    private final String TAG = "VerificationActivity";
     private static final int VERIFICATION_CODE_LENGTH = 4;
     private static final int VERIFICATION_CODE_WAIT = 30;
-
+    private final String TAG = "VerificationActivity";
     private String verificationCode;
     private AsyncTask myVerificationTask;
 
-    public void onClickButtonPhoneVerify (View view) {
+    public void onClickButtonPhoneVerify(View view) {
         Log.d(TAG, "onClickButtonPhoneVerify");
         if (validPhoneNumber()) {
             myVerificationTask.execute();
         }
     }
 
-    public void onClickButtonPhoneConfirm (View view) {
+    public void onClickButtonPhoneConfirm(View view) {
         Log.d(TAG, "onClickButtonPhoneConfirm");
 
         EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
         EditText editTextVerificationCode = (EditText) findViewById(R.id.editTextVerificationCode);
 
         String selection =
-                MyContactsConnector.CONTACT_PHONE+ " = "+editTextPhoneNumber.getText().toString()+
-                        " and "+MyContactsConnector.CONTACT_VERIFIED+" = "+MyContactsConnector.NOT_VERIFIED;
-        
+                MyContactsConnector.CONTACT_PHONE + " = " + editTextPhoneNumber.getText().toString() +
+                        " and " + MyContactsConnector.CONTACT_VERIFIED + " = " + MyContactsConnector.NOT_VERIFIED;
+
         String verificationCodeInput = editTextVerificationCode.getText().toString();
-        Log.d(TAG, "Code value = "+verificationCodeInput);
+        Log.d(TAG, "Code value = " + verificationCodeInput);
         if (verificationCodeInput.equals(verificationCode) && getContentResolver().query(MyContactsConnector.CONTENT_URI, null, selection, null, null).getCount() != 0) {
             Log.d(TAG, "Success");
             Intent intentContactAdd = new Intent(this, ContactsListActivity.class);
@@ -54,6 +53,7 @@ public class VerificationActivity extends AppCompatActivity {
     /**
      * Validate the user input phone number
      * Validation criteria: //TODO: fill phone validation criteria
+     *
      * @return true: if phone number is valid, false: otherwise
      */
     private boolean validPhoneNumber() {
@@ -68,10 +68,7 @@ public class VerificationActivity extends AppCompatActivity {
     }
 
 
-
-
     // ---------------------- Activity Life Cycle -------------------------- //
-
 
 
     @Override
@@ -143,9 +140,9 @@ public class VerificationActivity extends AppCompatActivity {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            Log.d(TAG,"in background");
+            Log.d(TAG, "in background");
 
-            while(count > 0) {
+            while (count > 0) {
                 try {
                     Thread.sleep(1000);
                     if (isCancelled()) {
@@ -165,12 +162,12 @@ public class VerificationActivity extends AppCompatActivity {
             super.onPreExecute();
             verificationCode = "";
 
-            for (int i = 0 ; i < VERIFICATION_CODE_LENGTH ; i++) {
-                int rand = (int)(Math.random()*10);
+            for (int i = 0; i < VERIFICATION_CODE_LENGTH; i++) {
+                int rand = (int) (Math.random() * 10);
                 verificationCode += rand;
             }
 
-            Log.d(TAG, "the value is "+ verificationCode);
+            Log.d(TAG, "the value is " + verificationCode);
 
             EditText editTextPhoneNumber = (EditText) findViewById(R.id.editTextPhoneNumber);
             String phoneNumber = editTextPhoneNumber.getText().toString();

@@ -104,19 +104,50 @@ public class ContactsContentProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         Log.d(TAG, "update");
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        int rowsAffected = 0;
+
+        //check query type: Multiple Contacts OR Single Contact
+        switch (uriMatcher.match(uri)) {
+            case MULTIPLE_CONTACTS:
+                rowsAffected = contactsDB.update(MyContactsConnector.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case SINGLE_CONTACT:
+                String segment = uri.getPathSegments().get(ID_PATH_SEGMENT);
+                String whereClause = MyContactsConnector.CONTACT_ID + "=" + segment + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+                Log.d(TAG, "segment = " + segment);
+                Log.d(TAG, "whereClause = " + whereClause);
+                rowsAffected = contactsDB.update(MyContactsConnector.TABLE_NAME, values, whereClause, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsAffected;
     }
 
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         Log.d(TAG, "delete");
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        int rowsAffected = 0;
+
+        //check query type: Multiple Contacts OR Single Contact
+        switch (uriMatcher.match(uri)) {
+            case MULTIPLE_CONTACTS:
+                rowsAffected = contactsDB.delete(MyContactsConnector.TABLE_NAME, selection, selectionArgs);
+                break;
+            case SINGLE_CONTACT:
+                String segment = uri.getPathSegments().get(1);
+                String whereClause = MyContactsConnector.CONTACT_ID + "=" + segment + (!TextUtils.isEmpty(selection) ? " AND (" + selection + ")" : "");
+                rowsAffected = contactsDB.delete(MyContactsConnector.TABLE_NAME, whereClause, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsAffected;
     }
 
     private class DatabaseOpenHelper extends SQLiteOpenHelper {

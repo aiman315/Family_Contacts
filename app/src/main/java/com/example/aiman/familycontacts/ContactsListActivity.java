@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 public class ContactsListActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_ADD_CONTACT = 900;
-    private static final int REQUEST_CODE_EDIT_CONTACT = 901;
+    public static final int REQUEST_CODE_ADD_CONTACT = 900;
+    public static final int REQUEST_CODE_EDIT_CONTACT = 901;
 
     private static final String TAG = "ContactsListActivity";
     private static final int USER_ADMIN = 0;
@@ -72,75 +72,6 @@ public class ContactsListActivity extends AppCompatActivity {
         return false;
     }
 
-    /**
-     * Internal class to load contacts from database into the contacts list
-     * @author Aiman
-     *
-     */
-    private class LoadContactsTask extends AsyncTask<Object, Object, Cursor> {
-
-        @Override
-        protected Cursor doInBackground(Object... arg0) {
-            Log.d(TAG, "doInBackground");
-
-            //get contacts
-            final Cursor cursorResults = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
-
-            //add contacts
-            final int indexContactId = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_ID);
-            int indexContactName = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_NAME);
-            int indexContactPhone = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_PHONE);
-            int indexContactEmail = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_EMAIL);
-
-            for (cursorResults.moveToFirst(); !cursorResults.isAfterLast(); cursorResults.moveToNext()) {
-                if (isCancelled()) {
-                    return null;
-                }
-                Button button = new Button(getApplicationContext());
-                button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                button.setId(Integer.parseInt(cursorResults.getString(indexContactId)));
-                button.setText(cursorResults.getString(indexContactName));
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick");
-
-                        Intent intentViewContactActivity = new Intent(getApplicationContext(), ContactViewActivity.class);
-                        intentViewContactActivity.putExtra(MyContactsConnector.CONTACT_ID, v.getId());
-                        //startActivityForResult(intentViewContactActivity, REQUEST_CODE_EDIT_CONTACT);
-                        startActivity(intentViewContactActivity);
-                    }
-                });
-                publishProgress(button);
-            }
-            return null;
-
-        }
-
-        protected void onPostExecute(Cursor result) {
-            Log.d(TAG, "onPostExecute");
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //clear previous contacts from layout
-            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
-            linearLayoutContactsList.removeAllViews();
-        }
-
-        @Override
-        protected void onProgressUpdate(Object... values) {
-            super.onProgressUpdate(values);
-            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
-            linearLayoutContactsList.addView((View)values[0]);
-        }
-    }
-
-
-    // -------------------- Activity Life Cycle ------------------------
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +79,9 @@ public class ContactsListActivity extends AppCompatActivity {
 
         userType = USER_REGULAR;
     }
+
+
+    // -------------------- Activity Life Cycle ------------------------
 
     @Override
     protected void onStart() {
@@ -212,15 +146,6 @@ public class ContactsListActivity extends AppCompatActivity {
                 startActivityForResult(intentAddContactActivity, REQUEST_CODE_ADD_CONTACT);
                 return true;
             }
-            case R.id.action_edit_contact: {
-                Intent intentAddContactActivity = new Intent(getApplicationContext(), ContactAddActivity.class);
-                startActivityForResult(intentAddContactActivity, REQUEST_CODE_EDIT_CONTACT);
-                return true;
-            }
-            case R.id.action_delete_contact: {
-                //TODO
-                return true;
-            }
             case R.id.action_settings: {
                 return true;
             }
@@ -241,6 +166,72 @@ public class ContactsListActivity extends AppCompatActivity {
             editContact(data);
         } else if ((requestCode == REQUEST_CODE_ADD_CONTACT || requestCode == REQUEST_CODE_EDIT_CONTACT) && resultCode == RESULT_CANCELED) {
             Toast.makeText(getApplicationContext(), "Canceled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Internal class to load contacts from database into the contacts list
+     *
+     * @author Aiman
+     */
+    private class LoadContactsTask extends AsyncTask<Object, Object, Cursor> {
+
+        @Override
+        protected Cursor doInBackground(Object... arg0) {
+            Log.d(TAG, "doInBackground");
+
+            //get contacts
+            final Cursor cursorResults = getContentResolver().query(MyContactsConnector.CONTENT_URI, null, null, null, MyContactsConnector.CONTACT_NAME);
+
+            //add contacts
+            final int indexContactId = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_ID);
+            int indexContactName = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_NAME);
+            int indexContactPhone = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_PHONE);
+            int indexContactEmail = cursorResults.getColumnIndex(MyContactsConnector.CONTACT_EMAIL);
+
+            for (cursorResults.moveToFirst(); !cursorResults.isAfterLast(); cursorResults.moveToNext()) {
+                if (isCancelled()) {
+                    return null;
+                }
+                Button button = new Button(getApplicationContext());
+                button.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setId(Integer.parseInt(cursorResults.getString(indexContactId)));
+                button.setText(cursorResults.getString(indexContactName));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "onClick");
+
+                        Intent intentViewContactActivity = new Intent(getApplicationContext(), ContactViewActivity.class);
+                        intentViewContactActivity.putExtra(MyContactsConnector.CONTACT_ID, v.getId());
+                        //startActivityForResult(intentViewContactActivity, REQUEST_CODE_EDIT_CONTACT);
+                        startActivity(intentViewContactActivity);
+                    }
+                });
+                publishProgress(button);
+            }
+            return null;
+
+        }
+
+        protected void onPostExecute(Cursor result) {
+            Log.d(TAG, "onPostExecute");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //clear previous contacts from layout
+            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
+            linearLayoutContactsList.removeAllViews();
+        }
+
+        @Override
+        protected void onProgressUpdate(Object... values) {
+            super.onProgressUpdate(values);
+            LinearLayout linearLayoutContactsList = (LinearLayout) findViewById(R.id.linearLayoutContactsList);
+            linearLayoutContactsList.addView((View) values[0]);
         }
     }
 }

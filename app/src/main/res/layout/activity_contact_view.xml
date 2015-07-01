@@ -17,10 +17,6 @@
             android:id="@+id/textViewContactFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:clickable="false"
@@ -42,14 +38,10 @@
             android:id="@+id/textViewContactPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
             android:layout_below="@+id/textViewContactFullNameValue"
             android:layout_centerInParent="true"
-            android:phoneNumber="true"
             android:clickable="false"
+            android:phoneNumber="true"
             android:text="Phone" />
 
         <TextView
@@ -59,8 +51,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/textViewContactPhoneNumber"
-            android:layout_marginEnd="275dp"
-            android:layout_marginRight="275dp"
             android:clickable="false"
             android:text="@string/empty"
             android:textStyle="bold" />
@@ -69,10 +59,6 @@
             android:id="@+id/textViewContactEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="false"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="false"
-            android:layout_alignParentStart="false"
             android:layout_below="@+id/textViewContactPhoneNumberValue"
             android:layout_centerInParent="true"
             android:clickable="false"
@@ -82,14 +68,29 @@
             android:id="@+id/textViewContactEmailValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/textViewContactPhoneNumberValue"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/textViewContactPhoneNumberValue"
             android:layout_below="@+id/textViewContactEmail"
             android:clickable="false"
             android:text="@string/empty"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewContactVerification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewContactEmailValue"
+            android:layout_centerInParent="true"
+            android:clickable="false"
+            android:text="Verification" />
+
+        <ImageView
+            android:id="@+id/imageViewContactVerification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewContactVerification"
+            android:layout_centerInParent="true"
+            android:src="@android:drawable/ic_delete" />
 
 
     </RelativeLayout>

@@ -1,9 +1,9 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scrollView"
     tools:context="com.example.aiman.familycontacts.ContactAddActivity">
 
     <RelativeLayout
@@ -12,62 +12,69 @@
 
 
         <ImageButton
+            android:id="@+id/imageButtonContactImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButtonContactImage"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/abc_btn_check_material"
-            android:onClick="onClickImageButtonContactImage"/>
+            android:onClick="onClickImageButtonContactImage"
+            android:src="@drawable/abc_btn_check_material" />
 
         <EditText
+            android:id="@+id/editTextContactFullName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/editTextContactFullName"
             android:layout_below="@+id/imageButtonContactImage"
             android:layout_centerHorizontal="true"
-            android:hint="Full Name"/>
+            android:ems="10"
+            android:hint="Full Name"
+            android:inputType="textPersonName" />
 
         <EditText
+            android:id="@+id/editTextContactPhoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/editTextContactPhoneNumber"
             android:layout_below="@+id/editTextContactFullName"
             android:layout_centerHorizontal="true"
-            android:hint="Phone Number"/>
+            android:ems="10"
+            android:hint="Phone Number"
+            android:inputType="phone" />
 
         <EditText
+            android:id="@+id/editTextContactEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:ems="10"
-            android:id="@+id/editTextContactEmail"
             android:layout_below="@+id/editTextContactPhoneNumber"
             android:layout_centerHorizontal="true"
-            android:hint="Email Address"/>
+            android:ems="10"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress" />
 
-        <Button
+        <CheckBox
+            android:id="@+id/checkBoxContactVerify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_contact_cancel"
-            android:id="@+id/buttonContactCancel"
             android:layout_below="@+id/editTextContactEmail"
             android:layout_centerHorizontal="true"
-            android:onClick="onClickButtonContactCancel"/>
+            android:text="Verified Contact" />
 
         <Button
+            android:id="@+id/buttonContactCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_contact_confirm"
+            android:layout_below="@+id/checkBoxContactVerify"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickButtonContactCancel"
+            android:text="@string/button_contact_cancel" />
+
+        <Button
             android:id="@+id/buttonContactConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/buttonContactCancel"
             android:layout_centerHorizontal="true"
-            android:onClick="onClickButtonContactConfirm"/>
-
+            android:onClick="onClickButtonContactConfirm"
+            android:text="@string/button_contact_confirm" />
 
 
     </RelativeLayout>

@@ -31,5 +31,5 @@ public class MyContactsConnector {
     public static final int NAME_COLUMN = 1;
     public static final int PHONE_COLUMN = 2;
     public static final int EMAIL_COLUMN = 3;
-    public static final int IMAGE_COLUMN = 4;
+    public static final int VERIFICATION_COLUMN = 4;
 }
